@@ -1,0 +1,149 @@
+{% load staticfiles %}
+{% load blog_tags %}
+
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>David's Blog</title>
+        <link rel="icon" href="{% static 'blog/image/title.ico' %}" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="{% static 'blog/assets/css/main.css' %}" />
+        <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+        <!-- markdown code style -->
+        <link rel="stylesheet" href="{% static 'blog/assets/css/highlights/autumn.css' %}">
+
+        <!-- calendar -->
+	    <link href="{% static 'blog/calendar/css/jquery-ui-1.10.1.css' %}" rel="stylesheet">
+        <link href="{% static 'blog/calendar/css/lugo.datepicker.css' %}" rel="stylesheet">
+
+	</head>
+	<body>
+
+		<!-- Content -->
+			<div id="content">
+				<div class="inner">
+
+                    {% block main %}
+                    {% endblock main %}
+
+					<!-- Pagination -->
+                    {% block pagination %}
+                    {% endblock pagination %}
+
+				</div>
+			</div>
+
+		<!-- Sidebar -->
+			<div id="sidebar">
+
+				<!-- Logo -->
+					<h1 id="logo"><a href="{% url 'blog:index' %}">韦人人韦</a></h1>
+
+{#                    <nav id="nav">#}
+{#                        <object type="application/x-shockwave-flash" style="outline:none;" data="http://cdn.abowman.com/widgets/penguins/penguins.swf?" width="180" height="200"><param name="movie" value="http://cdn.abowman.com/widgets/penguins/penguins.swf?"></param><param name="AllowScriptAccess" value="always"></param><param name="wmode" value="opaque"></param><param name="scale" value="noscale"/><param name="salign" value="tl"/></object>#}
+{#                    </nav>#}
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul>
+                            <li><a href="{% url 'blog:index' %}" class="icon fa-home"> Home</a></li>
+							<li><a href="{% url 'blog:about' %}" class="icon fa-user"> About Me</a></li>
+						</ul>
+					</nav>
+
+                <!-- Calendar -->
+					<section class="box recent-comments">
+						<div class="inner">
+                            <div class="datepicker ll-skin-lugo"></div>
+						</div>
+					</section>
+
+				<!-- Search -->
+					<section class="box search">
+						<form method="get" action="{% url 'blog:search' %}">
+							<input type="text" class="text" name="s" placeholder="Search" />
+						</form>
+					</section>
+
+
+				<!-- Text -->
+					<section class="box text-style1">
+						<div class="inner">
+							<p>
+								<strong> David </strong> <br/> zero to one
+							</p>
+						</div>
+					</section>
+
+				<!-- Recent Posts -->
+					<section class="box recent-posts">
+						<header>
+							<h2>Recent Posts</h2>
+						</header>
+                        {% get_recent_posts as recent_post_list %}
+						<ul>
+                            {% for post in recent_post_list %}
+							    <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+							{% endfor %}
+						</ul>
+					</section>
+
+				<!-- Archives -->
+					<section class="box recent-comments">
+						<header>
+							<h2>Archives</h2>
+						</header>
+                        {% archives as date_list %}
+						<ul>
+                            {% for date in date_list %}
+							    <li><a href="{% url 'blog:archives' date.year date.month %}">{{ date.year }}年{{ date.month }}月</a></li>
+							{% endfor %}
+						</ul>
+					</section>
+
+                <!-- Categories -->
+					<section class="box recent-comments">
+						<header>
+							<h2>Categories</h2>
+						</header>
+                        {% get_categories as category_list %}
+						<ul>
+                            {% for category in category_list %}
+							    <li><a href="{% url 'blog:category' category.pk %}">{{ category.name }}<span class="post-count">({{ category.num_posts }})</span></a></li>
+                            {% endfor %}
+						</ul>
+					</section>
+
+				<!-- Copyright -->
+                    {% get_year as YEAR %}
+					<ul id="copyright">
+						<li>&copy; {{ YEAR }} David </li>
+                        <li>All rights reserved</li>
+                        <li><a href="http://www.miitbeian.gov.cn/" >苏ICP备17049163号</a></li>
+                        <li>Template from <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="{% static 'blog/assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'blog/assets/js/skel.min.js' %}"></script>
+			<script src="{% static 'blog/assets/js/util.js' %}"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="{% static 'blog/assets/js/main.js' %}"></script>
+
+            <script src="{% static 'blog/calendar/js/jquery-1.9.1.js' %}"></script>
+            <script src="{% static 'blog/calendar/js/jquery-ui-1.10.1.min.js' %}"></script>
+            <script>
+            $(function() {
+                $( ".datepicker" ).datepicker({
+                    inline: true,
+                    showOtherMonths: true
+                });
+            });
+            </script>
+	</body>
+</html>
